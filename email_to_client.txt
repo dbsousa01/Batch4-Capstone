@@ -1,0 +1,26 @@
+Dear Dr. Annabelle Wilson,
+
+I have been forwarded your email and look forward to working with you. I feel that we can present a good solution for the problem, thank you for wanting to work with us. I will be your point of contact with the team moving forward.
+
+The team has been analysing closely your requests and the problem, having already started doing some preliminary analysis to assess the requirements. If we understand correctly these are your required deliverables:
+- An analysis report on the current situation
+- An API with the model being callable to detect if new stops should be done or not (in order to increase successful searches)
+
+Regarding the first point, the analysis report, you wish for us to detect if there is any type of discrimination towards any gender, ethinicity and age. Moreover, this analysis would also be done in terms of cloth removing as well, per station and over time, as some behaviours might be corrected already due to trainings. Regarding this we have some questions:
+
+1. Is the ethnicity to be analysed the one that is being reported by the officers or the self-reported by the people? We found some discrepancies in some situations that sometimes they did not match. We might also recommend using the officer reported since it appears to be more "general" in terms of context.
+2. Regarding the age, we immediately found some cases of people reported having <10 years old, we assume this as a mistake and advise to drop these observations (they are actually a minority - less than 0.001%) - The same happens with the Gender "Other".
+3. Finally, the column that states cloth removal is mostly missing, around 64% (426549 out of 660611 rows) has no information. Due to this the analysis will be only using the information available but it will not prove much trustworthy since the quantity of data is very low.
+
+
+Regarding the model that will be deployed in the API we have the following questions:
+
+1. We would like you to clarify what it means to conduct a search only when there is more than 10% likelihood that the search will be successful. This is when compared to what - successful and not successful? 10% when using what type of metric? If you could clarify and give further details we would appreciate it. 
+2. Another thing we also noticed is that there are several outcomes in a search situation, most of which we are not familiar with, and we would like to know if it is possible to group similar outcomes into smaller groups? For the modelling we would like two labels (search successful or not). However in the analysis and for the model verification, we need the outcomes explained, if possible, and similar outcomes may be grouped in the same, more general, category.
+
+
+Once again, it is a pleasure to work alongside you and I hope you are able to answer all of our questions! Best of luck and thank you for your time.
+
+Best regards,
+Daniel Sousa
+Awkward Problem Solutions™.
