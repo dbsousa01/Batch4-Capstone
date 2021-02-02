@@ -130,6 +130,8 @@ dmypy.json
 
 # MAC OS files
 .DS_Store
+.idea/
 
 # Custom folders
-images/*
+images/
+models/
