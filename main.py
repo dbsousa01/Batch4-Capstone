@@ -1,5 +1,6 @@
 from data_processing import processing as pc
 
 df = pc.load_data()
-print(df.head())
+df = pc.build_outcome_label(df)
+print(df["label"].unique())
 
