@@ -14,6 +14,13 @@ def load_data() -> pd.DataFrame:
     file_path = "{}/../data/train.csv".format(dir_path)
     df = pd.read_csv(file_path, index_col="observation_id")
 
+    # fill na values - missing values are imputed, not better values for now
+    df.fillna({
+        "Type": "missing",
+        "Part of a policing operation": False,
+        "Legislation": "missing",
+    }, inplace=True)
+
     return df
 
 
