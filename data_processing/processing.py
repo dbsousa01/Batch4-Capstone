@@ -6,7 +6,7 @@ import pandas as pd
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
-def load_data():
+def load_data() -> pd.DataFrame:
     """
         Loads the data and returns it in a dataframe
     :return:
