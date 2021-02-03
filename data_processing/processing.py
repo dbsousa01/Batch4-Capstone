@@ -36,3 +36,25 @@ def build_outcome_label(df: pd.DataFrame) -> pd.DataFrame:
     df_label["label"] = df_label["Outcome"]
     df_label["label"] = np.where(df_label["Outcome"].isin(sucessful_outcomes), 1, 0)
     return df_label
+
+
+def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+        Create time features for the dataset
+
+    :param df: DataFrame to be processed
+    :return: df with the new time features as columns
+    """
+
+    df_time = df.copy()
+
+    df_time['Date'] = pd.to_datetime(df_time['Date'], format='%Y/%m/%d')
+
+    # get the hour and day of the week, maybe they will be useful
+    df_time['hour'] = df_time['Date'].dt.hour
+    df_time['month'] = df_time['Date'].dt.month
+    df_time["year"] = df_time["Date"].dt.year
+    df_time['day_of_week'] = df_time['Date'].dt.day_name()
+    df_time["year-quarter"] = df_time["Date"].dt.year.astype(str) + 'Q' + df_time["Date"].dt.quarter.astype(str)
+
+    return df_time
