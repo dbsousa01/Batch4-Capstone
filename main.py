@@ -3,6 +3,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.metrics import classification_report, roc_auc_score
 
 # Custom imports
 from data_processing import processing as pc
@@ -74,4 +75,8 @@ pipeline = make_pipeline(
 pipeline.fit(X_train, y_train)
 
 y_pred = pipeline.predict(X_test)
+
+roc_score = roc_auc_score(y_test, y_pred)
+print(roc_score)
+print(classification_report(y_test, y_pred, target_names=["Not Successful Search", "Successful Search"]))
 
