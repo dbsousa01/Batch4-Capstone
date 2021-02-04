@@ -1,5 +1,7 @@
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 # Custom imports
@@ -57,4 +59,19 @@ preprocessor = ColumnTransformer(
     ],
     remainder="drop",
 )
+
+pipeline = make_pipeline(
+    preprocessor,
+    RandomForestClassifier(max_depth=3,
+                           min_samples_leaf=.03,
+                           class_weight="balanced",
+                           random_state=123,
+                           n_jobs=-1,
+                           verbose=1),
+)
+
+# Fit the model
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
 
