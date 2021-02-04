@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 # File variables
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_data() -> pd.DataFrame:
