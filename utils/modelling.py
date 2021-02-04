@@ -15,9 +15,9 @@ def create_train_test(
     train, test = train_test_split(
         df,
         stratify=df[
-            ["label", "station", "Officer-defined ethnicity", "Gender", "Age range"]
+            ["label", "station"]
         ],
-        test_size=0.25,
+        test_size=0.20,
         random_state=123,
     )
 
