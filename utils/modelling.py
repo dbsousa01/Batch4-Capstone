@@ -43,4 +43,4 @@ def create_train_test(
     )
     y_test = test[["label"]]
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train.to_numpy(), y_test.to_numpy()
