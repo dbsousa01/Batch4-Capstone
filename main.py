@@ -5,11 +5,14 @@ from sklearn.compose import ColumnTransformer
 
 # Custom imports
 from data_processing import processing as pc
+from utils import modelling as md
 
 df = pc.load_data()
 df = pc.build_outcome_label(df)
 df = pc.create_time_features(df)
 
+# Generate train and test sets
+X_train, X_test, y_train, y_test = md.create_train_test(df)
 
 # Create pipeline for feature transformation
 all_features = [
