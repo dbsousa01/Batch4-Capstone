@@ -1,7 +1,6 @@
-from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 # Custom imports
 from data_processing import processing as pc
@@ -15,19 +14,6 @@ df = pc.create_time_features(df)
 X_train, X_test, y_train, y_test = md.create_train_test(df)
 
 # Create pipeline for feature transformation
-all_features = [
-    "Type",
-    "Part of a policing operation",
-    "Gender",
-    "Age range",
-    "Officer-defined ethnicity",
-    "Legislation",
-    "Object of search",
-    "station",
-    "hour",
-    "day_of_week",
-]
-
 # Features array
 numerical_features = ["hour"]
 standard_categorical_features = [
@@ -68,5 +54,7 @@ preprocessor = ColumnTransformer(
         ("num", numeric_transformer, numerical_features),
         ("std_cat", standard_categorical_transformer, standard_categorical_features),
         ("other_cat", other_cat_transformer, other_categorical_features),
-    ]
+    ],
+    remainder="drop",
 )
+
