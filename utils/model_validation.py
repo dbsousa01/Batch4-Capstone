@@ -68,18 +68,21 @@ def verify_no_discrimination(
             ignored_stations.append((station, None, []))
 
     global_precisions = {}
-    for sensitive_class in sensitive_classes:
-        for second_sensitive_class in second_sensitive_classes:
-            mask = (X_test[first_sensitive_column] == sensitive_class) & (
-                X_test[second_sensitive_column] == second_sensitive_class
-            )
-
-            if np.sum(mask) > min_samples:
-                # key to filter the dictionary
-                key = "{0} - {1}".format(sensitive_class, second_sensitive_class)
-                global_precisions[key] = precision_score(
-                    y_true[mask], y_pred[mask], pos_label=1
+    for station in stations:
+        for sensitive_class in sensitive_classes:
+            for second_sensitive_class in second_sensitive_classes:
+                mask = (
+                    (X_test[first_sensitive_column] == sensitive_class)
+                    & (X_test[second_sensitive_column] == second_sensitive_class)
+                    & (X_test["station"] == station)
                 )
+
+                if np.sum(mask) > min_samples:
+                    # key to filter the dictionary
+                    key = "{0} - {1}".format(sensitive_class, second_sensitive_class)
+                    global_precisions[key] = precision_score(
+                        y_true[mask], y_pred[mask], pos_label=1
+                    )
 
     if len(precisions) > 1:
         diff = np.max(list(precisions.values())) - np.min(list(precisions.values()))
