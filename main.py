@@ -33,11 +33,12 @@ other_categorical_features = [
     "Officer-defined ethnicity",
 ]
 
-# Categorical transformers
+# Numerical transformer
 numeric_transformer = Pipeline(
     steps=[("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
 )
 
+# Categorical transformers
 standard_categorical_transformer = Pipeline(
     steps=[
         ("imputer", SimpleImputer(strategy="constant", fill_value="missing")),
@@ -52,6 +53,7 @@ other_cat_transformer = Pipeline(
     ]
 )
 
+# Put them all together
 preprocessor = ColumnTransformer(
     transformers=[
         ("num", numeric_transformer, numerical_features),
@@ -81,5 +83,9 @@ y_pred = pipeline.predict(X_test)
 
 roc_score = roc_auc_score(y_test, y_pred)
 print(roc_score)
-print(classification_report(y_test, y_pred, target_names=["Not Successful Search", "Successful Search"]))
+print(
+    classification_report(
+        y_test, y_pred, target_names=["Not Successful Search", "Successful Search"]
+    )
+)
 
