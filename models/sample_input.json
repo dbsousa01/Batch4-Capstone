@@ -1,0 +1,14 @@
+{
+ "observation_id": "123",
+ "Type": "Person search",
+ "Date": "2019-12-01T00:00:00+00:00",
+ "Part of a policing operation": true,
+ "Latitude": 50.368247,
+ "Longitude": -4.126646,
+ "Gender": "Male",
+ "Age range": "18-24",
+ "Officer-defined ethnicity": "White",
+ "Legislation": "Misuse of Drugs Act 1971 (section 23)",
+ "Object of search": "Controlled drugs",
+ "station": "devon-and-cornwall"
+}
