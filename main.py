@@ -102,8 +102,9 @@ print(
 ############################################
 # Check for discrimination
 
-is_satisfied, problematic_stations, good_stations, global_precisions = mv.verify_no_discrimination(
-    X_test, y_test, y_pred)
+is_satisfied, problematic_stations, good_stations, global_precisions = mv.verify_no_discrimination(X_test,
+                                                                                                   y_test,
+                                                                                                   y_pred)
 
 if not is_satisfied:
     print("Requirement failed 😢")

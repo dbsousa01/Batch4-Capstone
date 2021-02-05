@@ -41,9 +41,11 @@ def verify_no_discrimination(
             for second_sensitive_class in second_sensitive_classes:
 
                 # Create a mask that filters according to class values
-                mask = (X_test[first_sensitive_column] == sensitive_class) & (
-                    X_test["station"] == station
-                ) & (X_test[second_sensitive_column] == second_sensitive_class)
+                mask = (
+                    (X_test[first_sensitive_column] == sensitive_class)
+                    & (X_test["station"] == station)
+                    & (X_test[second_sensitive_column] == second_sensitive_class)
+                )
 
                 # if the dataframe filtered with the mask has more than 30 rows
                 if np.sum(mask) > min_samples:
