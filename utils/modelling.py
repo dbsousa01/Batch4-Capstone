@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 
+# File variables
+models_path = "./models/"
+images_path = "./images/"
+
 
 def create_train_test(
     df: pd.DataFrame,
@@ -52,7 +56,7 @@ def create_train_test(
     return X_train, X_test, y_train.to_numpy(), y_test.to_numpy()
 
 
-def feature_importance(feature_names: List[str], clf: Pipeline, save_path: str) -> None:
+def feature_importance(feature_names: List[str], clf: Pipeline) -> None:
     """
         Function to create a plot that orders features and their importances for the trained model.
     Currently it's only implemented for LinearSVC since it is the best performing model
@@ -77,7 +81,7 @@ def feature_importance(feature_names: List[str], clf: Pipeline, save_path: str) 
     plt.yticks(range(len(names)), names)
     plt.tight_layout()
     plt.savefig(
-        save_path + "{0}_feature_importance_{1}.png".format(classifier_name, today_date)
+        images_path + "{0}_feature_importance_{1}.png".format(classifier_name, today_date)
     )
     plt.show()
     return
@@ -93,11 +97,11 @@ def save_model(pipeline: Pipeline, X_train: pd.DataFrame) -> None:
     """
 
     # save the model, columns and dtypes
-    with open('./models/columns.json', 'w') as fh:
+    with open(models_path + 'columns.json', 'w') as fh:
         json.dump(X_train.columns.tolist(), fh)
 
-    with open('./models/dtypes.pickle', 'wb') as fh:
+    with open(models_path + 'dtypes.pickle', 'wb') as fh:
         pickle.dump(X_train.dtypes, fh)
 
-    joblib.dump(pipeline, './models/pipeline.pickle')
+    joblib.dump(pipeline, models_path + 'pipeline.pickle')
     return
