@@ -105,3 +105,20 @@ def save_model(pipeline: Pipeline, X_train: pd.DataFrame) -> None:
 
     joblib.dump(pipeline, models_path + 'pipeline.pickle')
     return
+
+
+def load_model() -> [Pipeline, List[str], pd.Series]:
+    """
+        Loads the model into memory and returns the pipeline, columns array and their dtypes
+
+    :return:
+    """
+    with open(models_path + 'columns.json') as fh:
+        columns = json.load(fh)
+
+    with open(models_path + 'dtypes.pickle', 'rb') as fh:
+        dtypes = pickle.load(fh)
+
+    pipeline = joblib.load(models_path + 'pipeline.pickle')
+
+    return pipeline, columns, dtypes
