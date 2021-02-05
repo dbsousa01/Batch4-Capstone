@@ -33,16 +33,26 @@ def verify_no_discrimination(
     problematic_stations = []
     good_stations = []
     ignored_stations = []
+    # For every station
     for station in stations:
         precisions = {}
+        # For every classes
         for sensitive_class in sensitive_classes:
-            mask = (X_test[first_sensitive_column] == sensitive_class) & (
-                X_test["station"] == station
-            )
-            if np.sum(mask) > min_samples:
-                precisions[sensitive_class] = precision_score(
-                    y_true[mask], y_pred[mask], pos_label=1
-                )
+            for second_sensitive_class in second_sensitive_classes:
+
+                # Create a mask that filters according to class values
+                mask = (X_test[first_sensitive_column] == sensitive_class) & (
+                    X_test["station"] == station
+                ) & (X_test[second_sensitive_column] == second_sensitive_class)
+
+                # if the dataframe filtered with the mask has more than 30 rows
+                if np.sum(mask) > min_samples:
+
+                    # generate the dict key with the two classes
+                    key = "{0} - {1}".format(sensitive_class, second_sensitive_class)
+                    precisions[key] = precision_score(
+                        y_true[mask], y_pred[mask], pos_label=1
+                    )
 
         if len(precisions) > 1:
             diff = np.max(list(precisions.values())) - np.min(list(precisions.values()))
@@ -57,11 +67,17 @@ def verify_no_discrimination(
 
     global_precisions = {}
     for sensitive_class in sensitive_classes:
-        mask = X_test[first_sensitive_column] == sensitive_class
-        if np.sum(mask) > min_samples:
-            global_precisions[sensitive_class] = precision_score(
-                y_true[mask], y_pred[mask], pos_label=1
+        for second_sensitive_class in second_sensitive_classes:
+            mask = (X_test[first_sensitive_column] == sensitive_class) & (
+                X_test[second_sensitive_column] == second_sensitive_class
             )
+
+            if np.sum(mask) > min_samples:
+                # key to filter the dictionary
+                key = "{0} - {1}".format(sensitive_class, second_sensitive_class)
+                global_precisions[key] = precision_score(
+                    y_true[mask], y_pred[mask], pos_label=1
+                )
 
     if len(precisions) > 1:
         diff = np.max(list(precisions.values())) - np.min(list(precisions.values()))
