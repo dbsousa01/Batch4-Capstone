@@ -71,7 +71,30 @@ def predict():
         return jsonify(response)
 
     response = {'outcome': bool(prediction)}
+    print(response)
     return jsonify(response)
+
+
+@app.route('/search_result', methods=['POST'])
+def update():
+    obs = request.get_json()
+
+    try:
+        p = Prediction.get(Prediction.observation_id == obs['observation_id'])
+        p.true_class = obs['outcome']
+        p.save()
+        response = {
+            "observation_id": p.observation_id,
+            "outcome": bool(p.predict),
+            "true_outcome": bool(p.true_class)
+        }
+        print(response)
+        return jsonify(response)
+
+    except Prediction.DoesNotExist:
+        error_msg = 'Observation ID: "{}" does not exist'.format(obs['observation_id'])
+        print(error_msg)
+        return jsonify({'error': error_msg})
 
 
 if __name__ == "__main__":
