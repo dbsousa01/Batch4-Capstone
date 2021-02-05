@@ -23,7 +23,7 @@ def load_data() -> pd.DataFrame:
         },
         inplace=True,
     )
-
+    # TODO maybe drop the other values since they represent a huge minority and don't help, also age < 10 drop
     return df
 
 
