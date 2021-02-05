@@ -43,6 +43,9 @@ test: venv
 run: venv
 	${PYTHON} main.py
 
+server: venv
+	${PYTHON} app.py
+
 lint: venv
 	${PYTHON} -m black main.py
 	${PYTHON} -m black data_processing/
