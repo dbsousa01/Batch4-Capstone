@@ -32,7 +32,9 @@ other_categorical_features = [
     "Gender",
     "Officer-defined ethnicity",
 ]
-cols_used = numerical_features + standard_categorical_features + other_categorical_features
+cols_used = (
+    numerical_features + standard_categorical_features + other_categorical_features
+)
 
 # Numerical transformer
 numeric_transformer = Pipeline(
@@ -92,4 +94,3 @@ print(
 
 md.feature_importance(cols_used, pipeline)
 md.save_model(pipeline, X_train)
-# md.save_model(pipeline, X_train)

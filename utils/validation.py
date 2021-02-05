@@ -5,11 +5,11 @@
 
 def check_request(request):
     """
-        Validates that our request is well formatted
+    Validates that our request is well formatted
 
-        Returns:
-        - assertion value: True if request is ok, False otherwise
-        - error message: empty if request is ok, False otherwise
+    Returns:
+    - assertion value: True if request is ok, False otherwise
+    - error message: empty if request is ok, False otherwise
     """
 
     if "observation_id" not in request:

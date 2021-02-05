@@ -56,7 +56,9 @@ def create_train_test(
     return X_train, X_test, y_train.to_numpy(), y_test.to_numpy()
 
 
-def calculate_prediction(pipeline: Pipeline, X_test: pd.DataFrame, decision_value: float = 0.1) -> np.asarray:
+def calculate_prediction(
+    pipeline: Pipeline, X_test: pd.DataFrame, decision_value: float = 0.1
+) -> np.asarray:
     """
         Function to calculate predictions based on probabilities. If proba of being true class es greater than
     decision_value, then it's the true class, else it's the false class.
@@ -100,7 +102,8 @@ def feature_importance(feature_names: List[str], clf: Pipeline) -> None:
     plt.yticks(range(len(names)), names)
     plt.tight_layout()
     plt.savefig(
-        images_path + "{0}_feature_importance_{1}.png".format(classifier_name, today_date)
+        images_path
+        + "{0}_feature_importance_{1}.png".format(classifier_name, today_date)
     )
     plt.show()
     return
@@ -116,13 +119,13 @@ def save_model(pipeline: Pipeline, X_train: pd.DataFrame) -> None:
     """
 
     # save the model, columns and dtypes
-    with open(models_path + 'columns.json', 'w') as fh:
+    with open(models_path + "columns.json", "w") as fh:
         json.dump(X_train.columns.tolist(), fh)
 
-    with open(models_path + 'dtypes.pickle', 'wb') as fh:
+    with open(models_path + "dtypes.pickle", "wb") as fh:
         pickle.dump(X_train.dtypes, fh)
 
-    joblib.dump(pipeline, models_path + 'pipeline.pickle')
+    joblib.dump(pipeline, models_path + "pipeline.pickle")
     return
 
 
@@ -132,12 +135,12 @@ def load_model() -> [Pipeline, List[str], pd.Series]:
 
     :return:
     """
-    with open(models_path + 'columns.json') as fh:
+    with open(models_path + "columns.json") as fh:
         columns = json.load(fh)
 
-    with open(models_path + 'dtypes.pickle', 'rb') as fh:
+    with open(models_path + "dtypes.pickle", "rb") as fh:
         dtypes = pickle.load(fh)
 
-    pipeline = joblib.load(models_path + 'pipeline.pickle')
+    pipeline = joblib.load(models_path + "pipeline.pickle")
 
     return pipeline, columns, dtypes
