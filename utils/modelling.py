@@ -1,3 +1,6 @@
+import json
+import pickle
+import joblib
 import numpy as np
 import pandas as pd
 
@@ -77,4 +80,24 @@ def feature_importance(feature_names: List[str], clf: Pipeline, save_path: str) 
         save_path + "{0}_feature_importance_{1}.png".format(classifier_name, today_date)
     )
     plt.show()
+    return
+
+
+def save_model(pipeline: Pipeline, X_train: pd.DataFrame) -> None:
+    """
+        Saves the model, columns and dtypes of the training set
+
+    :param pipeline: pipeline to be saved
+    :param X_train: DataFrame that was used to train the pipeline
+    :return:
+    """
+
+    # save the model, columns and dtypes
+    with open('./models/columns.json', 'w') as fh:
+        json.dump(X_train.columns.tolist(), fh)
+
+    with open('./models/dtypes.pickle', 'wb') as fh:
+        pickle.dump(X_train.dtypes, fh)
+
+    joblib.dump(pipeline, './models/pipeline.pickle')
     return
