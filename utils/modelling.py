@@ -56,6 +56,26 @@ def create_train_test(
     return X_train, X_test, y_train.to_numpy(), y_test.to_numpy()
 
 
+def calculate_prediction(pipeline: Pipeline, X_test: pd.DataFrame, decision_value: float = 0.1) -> np.asarray:
+    """
+        Function to calculate predictions based on probabilities. If proba of being true class es greater than
+    decision_value, then it's the true class, else it's the false class.
+
+    :param pipeline: pipeline
+    :param X_test: DataFrame to be predicted
+    :param decision_value: integer to be compared with
+
+    :return: np.asarray with predictions
+    """
+    # get all the probas of being successful
+    probas = pipeline.predict_proba(X_test)[:, 1]
+
+    # If proba is greater then decision_value then it's true, else false
+    predictions = np.where(probas > decision_value, 1, 0)
+
+    return predictions
+
+
 def feature_importance(feature_names: List[str], clf: Pipeline) -> None:
     """
         Function to create a plot that orders features and their importances for the trained model.
@@ -63,7 +83,6 @@ def feature_importance(feature_names: List[str], clf: Pipeline) -> None:
 
     :param feature_names: Name of features that are being used
     :param clf: The classifier object
-    :param save_path: Path of the file for the image to be saved
     :return:
     """
 
