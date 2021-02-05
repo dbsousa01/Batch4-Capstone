@@ -17,9 +17,9 @@ def predict():
     obs = pd.DataFrame([payload], columns=columns)
     obs_processed = pc.create_time_features(obs).astype(dtype=dtypes)
 
-    proba = pipeline.predict_proba(obs_processed)[0, 1]
+    prediction = pipeline.predict(obs_processed)[0]
     return jsonify({
-        'prediction': proba
+        'outcome': bool(prediction)
     })
 
 
