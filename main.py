@@ -91,3 +91,4 @@ print(
 )
 
 md.feature_importance(cols_used, pipeline, './images/')
+md.save_model(pipeline, X_train)
