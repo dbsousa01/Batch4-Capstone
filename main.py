@@ -80,7 +80,7 @@ pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", clf)])
 # Fit the model
 pipeline.fit(X_train, y_train)
 
-y_pred = pipeline.predict(X_test)
+y_pred = md.calculate_prediction(pipeline, X_test, decision_value=0.5)
 
 roc_score = roc_auc_score(y_test, y_pred)
 print(roc_score)
