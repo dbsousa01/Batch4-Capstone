@@ -1,6 +1,12 @@
 from flask import Flask, request, jsonify
 
+# Custom imports
+import utils.modelling as md
+
 app = Flask(__name__)
+
+# Load the model
+pipeline, columns, dtypes = md.load_model()
 
 
 @app.route('/predict', methods=['POST'])
