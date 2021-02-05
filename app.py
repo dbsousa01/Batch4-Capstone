@@ -11,7 +11,7 @@ app = Flask(__name__)
 pipeline, columns, dtypes = md.load_model()
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/should_search', methods=['POST'])
 def predict():
     payload = request.get_json()
     obs = pd.DataFrame([payload], columns=columns)
