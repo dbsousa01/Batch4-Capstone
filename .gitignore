@@ -135,3 +135,6 @@ dmypy.json
 
 # Custom folders
 images/
+
+# Custom files
+predictions.db
