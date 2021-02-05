@@ -1,3 +1,4 @@
+import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
@@ -8,7 +9,11 @@ from sklearn.metrics import classification_report, roc_auc_score
 # Custom imports
 from data_processing import processing as pc
 from utils import modelling as md
+from utils import model_validation as mv
 
+
+##################################################
+# Get the processed data
 df = pc.load_data()
 df = pc.build_outcome_label(df)
 df = pc.create_time_features(df)
@@ -16,6 +21,7 @@ df = pc.create_time_features(df)
 # Generate train and test sets
 X_train, X_test, y_train, y_test = md.create_train_test(df)
 
+##################################################
 # Create pipeline for feature transformation
 # Features array
 numerical_features = ["hour"]
@@ -66,6 +72,7 @@ preprocessor = ColumnTransformer(
     remainder="drop",
 )
 
+##############################################
 # Classifier
 clf = RandomForestClassifier(
     max_depth=3,
@@ -92,5 +99,22 @@ print(
     )
 )
 
-md.feature_importance(cols_used, pipeline)
-md.save_model(pipeline, X_train)
+############################################
+# Check for discrimination
+
+is_satisfied, problematic_stations, good_stations, global_precisions = mv.verify_no_discrimination(
+    X_test, y_test, y_pred)
+
+if not is_satisfied:
+    print("Requirement failed 😢")
+    print("Global rates: {}".format(global_precisions))
+    print("Num problematic departments: {}".format(len(problematic_stations)))
+    print("Num good departments: {}".format(len(good_stations)))
+
+    print("avg diff:", np.mean([p[1] for p in problematic_stations]))
+
+############################################
+# Save the model
+
+# md.feature_importance(cols_used, pipeline)
+# md.save_model(pipeline, X_train)
