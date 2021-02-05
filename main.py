@@ -1,7 +1,7 @@
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import make_pipeline, Pipeline
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.metrics import classification_report, roc_auc_score
 
@@ -61,15 +61,18 @@ preprocessor = ColumnTransformer(
     remainder="drop",
 )
 
-pipeline = make_pipeline(
-    preprocessor,
-    RandomForestClassifier(max_depth=3,
-                           min_samples_leaf=.03,
-                           class_weight="balanced",
-                           random_state=123,
-                           n_jobs=-1,
-                           verbose=1),
+# Classifier
+clf = RandomForestClassifier(
+    max_depth=3,
+    min_samples_leaf=0.03,
+    class_weight="balanced",
+    random_state=123,
+    n_jobs=-1,
+    verbose=1,
 )
+
+# Create the final pipeline
+pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", clf)])
 
 # Fit the model
 pipeline.fit(X_train, y_train)
