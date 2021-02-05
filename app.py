@@ -1,14 +1,44 @@
 import pandas as pd
 from flask import Flask, request, jsonify
+from peewee import (
+    SqliteDatabase, PostgresqlDatabase, Model, IntegerField,
+    FloatField, TextField, IntegrityError
+)
+from playhouse.shortcuts import model_to_dict
 
 # Custom imports
 import utils.modelling as md
 import data_processing.processing as pc
 
-app = Flask(__name__)
 
+########################################
+# Begin database stuff
+
+DB = SqliteDatabase('predictions.db')
+
+
+class Prediction(Model):
+    observation_id = TextField(unique=True)
+    observation = TextField()
+    proba = FloatField()
+    predict = IntegerField()
+    true_class = IntegerField(null=True)
+
+    class Meta:
+        database = DB
+
+
+DB.create_tables([Prediction], safe=True)
+
+# End database stuff
+########################################
 # Load the model
+
 pipeline, columns, dtypes = md.load_model()
+
+########################################
+# Begin webserver stuff
+app = Flask(__name__)
 
 
 @app.route('/should_search', methods=['POST'])
