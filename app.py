@@ -6,7 +6,6 @@ from peewee import (
     FloatField, TextField, IntegrityError
 )
 from playhouse.db_url import connect
-from playhouse.shortcuts import model_to_dict
 
 # Custom imports
 import utils.modelling as md
