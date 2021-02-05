@@ -85,8 +85,8 @@ def update():
         p.save()
         response = {
             "observation_id": p.observation_id,
-            "outcome": bool(p.predict),
-            "true_outcome": bool(p.true_class)
+            "predicted_outcome": bool(p.predict),
+            "outcome": bool(p.true_class)
         }
         print(response)
         return jsonify(response)
