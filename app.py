@@ -43,14 +43,35 @@ app = Flask(__name__)
 
 @app.route('/should_search', methods=['POST'])
 def predict():
-    payload = request.get_json()
-    obs = pd.DataFrame([payload], columns=columns)
+    obs_dict = request.get_json()
+    _id = obs_dict["observation_id"]
+
+    obs = pd.DataFrame([obs_dict], columns=columns)
     obs_processed = pc.create_time_features(obs).astype(dtype=dtypes)
 
     prediction = pipeline.predict(obs_processed)[0]
-    return jsonify({
-        'outcome': bool(prediction)
-    })
+    proba = pipeline.predict_proba(obs_processed)[0, 1]
+
+    response = {}
+
+    # Save the prediction in the DB
+    p = Prediction(
+        observation_id=_id,
+        proba=proba,
+        predict=prediction,
+        observation=obs_dict
+    )
+    try:
+        p.save()
+    except IntegrityError as e:
+        error_msg = "ERROR: Observation ID: '{}' already exists".format(_id)
+        response["error"] = error_msg
+        print(e)
+        DB.rollback()
+        return jsonify(response)
+
+    response = {'outcome': bool(prediction)}
+    return jsonify(response)
 
 
 if __name__ == "__main__":
