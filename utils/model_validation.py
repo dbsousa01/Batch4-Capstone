@@ -94,6 +94,15 @@ def verify_no_discrimination(
 
 
 def comparison_between_stations(X_test, y_true, y_pred, min_samples=30):
+    """
+        Function that returns the precision score for each station
+
+    :param X_test: DataFrame with the test set that we want to use for comparison
+    :param y_true: np.array with the true y labels
+    :param y_pred: np.array with the predicted y labels
+    :param min_samples: minimum samples for the entry to be considered
+    :return: sorted dict with the stations and their precisions
+    """
     stations = X_test["station"].unique()
     precisions = {}
 

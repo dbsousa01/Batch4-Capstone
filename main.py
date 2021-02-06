@@ -109,6 +109,8 @@ print(
     global_precisions,
 ) = mv.verify_no_discrimination(X_test, y_test, y_pred)
 
+precision_per_station = mv.comparison_between_stations(X_test, y_test, y_pred)
+
 if not is_satisfied:
     print("Requirement failed 😢")
     print("Global rates: {}".format(global_precisions))
@@ -117,6 +119,7 @@ if not is_satisfied:
 
     print("avg diff:", np.mean([p[1] for p in problematic_stations]))
 
+print(precision_per_station)
 ############################################
 # Save the model
 
