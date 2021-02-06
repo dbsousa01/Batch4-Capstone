@@ -45,6 +45,7 @@ app = Flask(__name__)
 @app.route('/should_search/', methods=['POST'])
 def predict():
     obs_dict = request.get_json()
+    print("Req received: {}".format(obs_dict))
     _id = obs_dict["observation_id"]
 
     obs = pd.DataFrame([obs_dict], columns=columns)
@@ -79,6 +80,7 @@ def predict():
 @app.route('/search_result/', methods=['POST'])
 def update():
     obs = request.get_json()
+    print("Req received: {}".format(obs))
 
     try:
         p = Prediction.get(Prediction.observation_id == obs['observation_id'])
