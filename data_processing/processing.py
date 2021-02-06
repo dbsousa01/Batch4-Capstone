@@ -58,7 +58,14 @@ def build_outcome_label(df: pd.DataFrame) -> pd.DataFrame:
     ]
 
     df_label["label"] = df_label["Outcome"]
-    df_label["label"] = np.where(df_label["Outcome"].isin(sucessful_outcomes), 1, 0)
+    df_label["label"] = np.where(
+        (
+            df_label["Outcome"].isin(sucessful_outcomes)
+            & df_label["Outcome linked to object " "of search"]
+        ),
+        1,
+        0,
+    )
     return df_label
 
 

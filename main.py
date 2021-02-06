@@ -123,5 +123,5 @@ print(precision_per_station)
 ############################################
 # Save the model
 
-# md.feature_importance(cols_used, pipeline)
-# md.save_model(pipeline, X_train)
+md.feature_importance(cols_used, pipeline)
+md.save_model(pipeline, X_train)
