@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from sklearn.metrics import precision_score
 
@@ -90,3 +91,22 @@ def verify_no_discrimination(
             is_satisfied = False
 
     return is_satisfied, problematic_stations, good_stations, global_precisions
+
+
+def comparison_between_stations(X_test, y_true, y_pred, min_samples=30):
+    stations = X_test["station"].unique()
+    precisions = {}
+
+    # For every station
+    for station in stations:
+
+        # Create a mask that filters according to station
+        mask = (X_test["station"] == station)
+
+        # if the dataframe filtered with the mask has more than 30 rows
+        if np.sum(mask) > min_samples:
+            # generate the dict key with the two classes
+            precisions[station] = precision_score(
+                y_true[mask], y_pred[mask], pos_label=1
+            )
+    return dict(sorted(precisions.items(), key=lambda item: item[1]))
