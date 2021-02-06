@@ -1,17 +1,18 @@
 import numpy as np
 import pandas as pd
 
+from typing import Tuple, List, Dict
 from sklearn.metrics import precision_score
 
 
 def verify_no_discrimination(
-    X_test,
-    y_true,
-    y_pred,
-    sensitive_columns_tuple=("Officer-defined ethnicity", "Gender"),
-    max_diff=0.05,
-    min_samples=30,
-):
+    X_test: pd.DataFrame,
+    y_true: np.asarray,
+    y_pred: np.asarray,
+    sensitive_columns_tuple: Tuple[str, str] = ("Officer-defined ethnicity", "Gender"),
+    max_diff: float = 0.05,
+    min_samples: float = 30,
+) -> [bool, List[str], List[str], List[float]]:
     """
             Verifies that no station has discrimination in between protected column tuples (ethnicity, gender)
 
@@ -93,7 +94,9 @@ def verify_no_discrimination(
     return is_satisfied, problematic_stations, good_stations, global_precisions
 
 
-def comparison_between_stations(X_test, y_true, y_pred, min_samples=30):
+def comparison_between_stations(
+    X_test: pd.DataFrame, y_true: np.asarray, y_pred: np.asarray, min_samples: int = 30
+) -> Dict[str, float]:
     """
         Function that returns the precision score for each station
 
@@ -110,7 +113,7 @@ def comparison_between_stations(X_test, y_true, y_pred, min_samples=30):
     for station in stations:
 
         # Create a mask that filters according to station
-        mask = (X_test["station"] == station)
+        mask = X_test["station"] == station
 
         # if the dataframe filtered with the mask has more than 30 rows
         if np.sum(mask) > min_samples:
