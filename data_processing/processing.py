@@ -20,6 +20,7 @@ def load_data() -> pd.DataFrame:
             "Type": "missing",
             "Part of a policing operation": False,
             "Legislation": "missing",
+            "Outcome linked to object of search": False,
         },
         inplace=True,
     )
