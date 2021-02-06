@@ -42,7 +42,7 @@ pipeline, columns, dtypes = md.load_model()
 app = Flask(__name__)
 
 
-@app.route('/should_search', methods=['POST'])
+@app.route('/should_search/', methods=['POST'])
 def predict():
     obs_dict = request.get_json()
     _id = obs_dict["observation_id"]
@@ -76,7 +76,7 @@ def predict():
     return jsonify(response)
 
 
-@app.route('/search_result', methods=['POST'])
+@app.route('/search_result/', methods=['POST'])
 def update():
     obs = request.get_json()
 
