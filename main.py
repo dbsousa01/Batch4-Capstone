@@ -5,18 +5,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.model_selection import GridSearchCV
 
 # Custom imports
 from data_processing import processing as pc
 from utils import modelling as md
 from utils import model_validation as mv
 
-
 ##################################################
 # Get the processed data
 df = pc.load_data()
 df = pc.build_outcome_label(df)
 df = pc.create_time_features(df)
+df = pc.build_features(df)
 
 # Generate train and test sets
 X_train, X_test, y_train, y_test = md.create_train_test(df)
@@ -27,9 +28,7 @@ X_train, X_test, y_train, y_test = md.create_train_test(df)
 numerical_features = ["hour"]
 standard_categorical_features = [
     "Type",
-    "Part of a policing operation",
     "Age range",
-    "Legislation",
     "Object of search",
     "station",
     "day_of_week",
@@ -37,9 +36,11 @@ standard_categorical_features = [
 other_categorical_features = [
     "Gender",
     "Officer-defined ethnicity",
+    "Legislation",
 ]
 cols_used = (
-    numerical_features + standard_categorical_features + other_categorical_features
+        numerical_features + standard_categorical_features + other_categorical_features + [
+    "Part of a policing operation"]
 )
 
 # Numerical transformer
@@ -75,8 +76,7 @@ preprocessor = ColumnTransformer(
 ##############################################
 # Classifier
 clf = RandomForestClassifier(
-    max_depth=3,
-    min_samples_leaf=0.03,
+    min_samples_leaf=100,
     class_weight="balanced",
     random_state=123,
     n_jobs=-1,
@@ -86,13 +86,28 @@ clf = RandomForestClassifier(
 # Create the final pipeline
 pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", clf)])
 
-# Fit the model
-pipeline.fit(X_train, y_train)
+# Grid search cv
+param_grid = {
+    "classifier__n_estimators": [100, 250, 450],
+    "classifier__max_depth": np.arange(3, 10, 2),
+    "classifier__min_samples_split": np.arange(2, 53, 10),
+}
 
-y_pred = md.calculate_prediction(pipeline, X_test, decision_value=0.5)
+grid_search = GridSearchCV(
+    pipeline,
+    param_grid=param_grid,
+    scoring="f1_macro",
+    verbose=3,
+)
+
+# Fit the model
+grid_search.fit(X_train, y_train)
+
+y_pred = md.calculate_prediction(grid_search, X_test, decision_value=0.5)
 
 roc_score = roc_auc_score(y_test, y_pred)
 print(roc_score)
+print("Best parameters {}".format(grid_search.best_params_, grid_search.best_score_))
 print(
     classification_report(
         y_test, y_pred, target_names=["Not Successful Search", "Successful Search"]
@@ -125,3 +140,4 @@ print(precision_per_station)
 
 md.feature_importance(cols_used, pipeline)
 md.save_model(pipeline, X_train)
+# TODO Gridsearchcv was done, group object of search and legislations with lower than 3000 rows as Other
