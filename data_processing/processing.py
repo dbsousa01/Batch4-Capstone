@@ -26,8 +26,10 @@ def load_data() -> pd.DataFrame:
     )
     # drop metropolitan station due to only NaNs
     df = df[df["station"] != "metropolitan"]
+    df = df[df["Gender"] != "Other"]
+    df = df[df["Age range"] != "under 10"]
+    df = df[(df["Officer-defined ethnicity"] != "Mixed") & df["Officer-defined ethnicity"] != "Other"]
 
-    # TODO maybe drop the other values since they represent a huge minority and don't help, also age < 10 drop
     return df
 
 
