@@ -28,7 +28,10 @@ def load_data() -> pd.DataFrame:
     df = df[df["station"] != "metropolitan"]
     df = df[df["Gender"] != "Other"]
     df = df[df["Age range"] != "under 10"]
-    df = df[(df["Officer-defined ethnicity"] != "Mixed") & df["Officer-defined ethnicity"] != "Other"]
+    df = df[
+        (df["Officer-defined ethnicity"] != "Mixed") & df["Officer-defined ethnicity"]
+        != "Other"
+    ]
 
     return df
 
@@ -100,18 +103,22 @@ def create_time_features(df: pd.DataFrame) -> pd.DataFrame:
 def build_features(df: pd.DataFrame) -> pd.DataFrame:
     df_copy = df.copy()
 
-    df_copy["Part of a policing operation"] = np.where(df_copy["Part of a policing operation"], 1, 0)
+    df_copy["Part of a policing operation"] = np.where(
+        df_copy["Part of a policing operation"], 1, 0
+    )
 
     series = df_copy.groupby("Legislation").count()["Type"] > 3000
     legislations_series = series[series != False]
     legislations_to_keep = list(legislations_series.index)
 
-    df_copy["Legislation"] = np.where(df["Legislation"].isin(legislations_to_keep), df["Legislation"], "Other")
+    df_copy["Legislation"] = np.where(
+        df["Legislation"].isin(legislations_to_keep), df["Legislation"], "Other"
+    )
 
     series = df_copy.groupby("Object of search").count()["Type"] > 3000
     obj_search_series = series[series != False]
     obj_search_list = list(obj_search_series.index)
-    df_copy["Object of search"] = np.where(df["Object of search"].isin(obj_search_list),
-                                           df["Object of search"],
-                                           "Other")
+    df_copy["Object of search"] = np.where(
+        df["Object of search"].isin(obj_search_list), df["Object of search"], "Other"
+    )
     return df_copy
