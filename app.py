@@ -50,6 +50,7 @@ def predict():
 
     obs = pd.DataFrame([obs_dict], columns=columns)
     obs_processed = pc.create_time_features(obs).astype(dtype=dtypes)
+    obs_processed = pc.build_features(obs_processed)
 
     prediction = pipeline.predict(obs_processed)[0]
     proba = pipeline.predict_proba(obs_processed)[0, 1]
