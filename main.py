@@ -79,25 +79,27 @@ preprocessor = ColumnTransformer(
 # Classifier
 clf = RandomForestClassifier(
     min_samples_leaf=100,
+    n_estimators=100,
+    max_depth=9,
+    min_samples_split=2,
     class_weight="balanced",
     random_state=123,
-    n_jobs=-1,
-    verbose=1,
+    n_jobs=4,
 )
 
 # Create the final pipeline
 pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", clf)])
 
 # Grid search cv
-param_grid = {
-    "classifier__n_estimators": [100, 250, 450],
-    "classifier__max_depth": np.arange(3, 10, 2),
-    "classifier__min_samples_split": np.arange(2, 53, 10),
-}
+# param_grid = {
+#    "classifier__n_estimators": [100, 250, 450],
+#    "classifier__max_depth": np.arange(3, 10, 2),
+#    "classifier__min_samples_split": np.arange(2, 53, 10),
+# }
 
 grid_search = GridSearchCV(
     pipeline,
-    param_grid=param_grid,
+    param_grid={},
     scoring="f1_macro",
     verbose=3,
 )
@@ -143,3 +145,6 @@ print(precision_per_station)
 md.feature_importance(cols_used, pipeline)
 md.save_model(pipeline, X_train)
 # TODO Gridsearchcv was done, group object of search and legislations with lower than 3000 rows as Other
+
+# Gridsearchcv was done, group object of search and legislations with lower than 3000 rows grouped as Other
+# latitude and longitude used, tried a geolocator for the city or location but also did not improve
