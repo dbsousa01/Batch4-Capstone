@@ -39,8 +39,10 @@ other_categorical_features = [
     "Legislation",
 ]
 cols_used = (
-        numerical_features + standard_categorical_features + other_categorical_features + [
-    "Part of a policing operation"]
+    numerical_features
+    + standard_categorical_features
+    + other_categorical_features
+    + ["Part of a policing operation", "Latitude", "Longitude"]
 )
 
 # Numerical transformer
