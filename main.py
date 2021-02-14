@@ -1,3 +1,4 @@
+import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
@@ -13,9 +14,17 @@ from utils import modelling as md
 from utils import model_validation as mv
 
 ##################################################
+# Get the first test set
+test1_df = pc.load_test_data()
+
 # Get the processed data
 df = pc.load_data()
 df = pc.build_outcome_label(df)
+
+# concat the first test set with the train dataframe
+df = pd.concat([df, test1_df])
+df.drop(columns=["predict"], inplace=True)
+
 df = pc.create_time_features(df)
 df = pc.build_features(df)
 
