@@ -152,7 +152,7 @@ print(precision_per_station)
 # Save the model
 
 md.feature_importance(cols_used, grid_search.best_estimator_)
-md.save_model(pipeline, X_train)
+md.save_model(grid_search, X_train)
 
 # Gridsearchcv was done, group object of search and legislations with lower than 3000 rows grouped as Other
 # latitude and longitude used, tried a geolocator for the city or location but also did not improve
