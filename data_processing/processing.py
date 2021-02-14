@@ -1,4 +1,5 @@
 import os
+import json
 import numpy as np
 import pandas as pd
 
@@ -122,3 +123,26 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
         df["Object of search"].isin(obj_search_list), df["Object of search"], "Other"
     )
     return df_copy
+
+
+def load_test_data() -> pd.DataFrame:
+    """
+        Loads the data from Test 1 that was received throughout the first week of production
+
+    :return: DataFrame with the new samples
+    """
+    file_path = "{}/../data/test_1.csv".format(dir_path)
+    df = pd.read_csv(file_path, index_col="observation_id")
+
+    # convert the dictionaries to dataframes
+    list_json = [eval(row) for row in df.observation.values]
+    obs_df = pd.DataFrame(list_json)
+
+    # merge with the predicted and true outcome
+    outcomes_df = df[["predict", "true_class"]]
+
+    predictions_df = pd.merge(obs_df, outcomes_df, left_on="observation_id", right_on="observation_id")
+    predictions_df.set_index("observation_id", inplace=True)
+    predictions_df.rename(columns={"true_class": "label"}, inplace=True)
+
+    return predictions_df
