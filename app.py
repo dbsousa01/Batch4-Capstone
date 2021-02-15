@@ -49,7 +49,7 @@ def predict():
     _id = obs_dict["observation_id"]
 
     obs = pd.DataFrame([obs_dict], columns=columns)
-    obs_processed = pc.create_time_features(obs).astype(dtype=dtypes)
+    obs_processed = pc.create_time_features(obs)
     obs_processed = pc.build_features(obs_processed)
 
     prediction = pipeline.predict(obs_processed)[0]
