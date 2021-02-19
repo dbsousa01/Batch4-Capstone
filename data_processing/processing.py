@@ -140,7 +140,9 @@ def load_test_data() -> pd.DataFrame:
     # merge with the predicted and true outcome
     outcomes_df = df[["predict", "true_class"]]
 
-    predictions_df = pd.merge(obs_df, outcomes_df, left_on="observation_id", right_on="observation_id")
+    predictions_df = pd.merge(
+        obs_df, outcomes_df, left_on="observation_id", right_on="observation_id"
+    )
     predictions_df.set_index("observation_id", inplace=True)
     predictions_df.rename(columns={"true_class": "label"}, inplace=True)
 
