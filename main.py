@@ -155,6 +155,8 @@ if not is_satisfied:
 
 print(precision_per_station)
 
+y_proba = grid_search.predict_proba(X_test)[:, 1]
+mv.plot_roc_curve(y_test, y_proba)
 ############################################
 # Save the model
 
