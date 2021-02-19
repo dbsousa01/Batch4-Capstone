@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 
+import matplotlib.pyplot as plt
 from typing import Tuple, List, Dict
-from sklearn.metrics import precision_score
+from sklearn.metrics import precision_score, roc_auc_score, roc_curve
 
 
 def verify_no_discrimination(
@@ -122,3 +123,38 @@ def comparison_between_stations(
                 y_true[mask], y_pred[mask], pos_label=1
             )
     return dict(sorted(precisions.items(), key=lambda item: item[1]))
+
+
+def plot_roc_curve(y_test: np.asarray, y_pred_proba: np.asarray) -> None:
+    """
+        Plots the ROC curve for the model
+    :param y_test: Y test set to generate the random toss coin curve
+    :param y_pred_proba: proba for the y_test made by the model
+    :return:
+    """
+
+    # most probable
+    ns_probs = [0 for _ in range(len(y_test))]
+    ns_auc = roc_auc_score(y_test, ns_probs)
+
+    model_auc = roc_auc_score(y_test, y_pred_proba)
+
+    print("No Skill: ROC AUC={}".format(ns_auc))
+    print("Model: ROC AUC={}".format(model_auc))
+
+    # calculate roc curves
+    ns_fpr, ns_tpr, _ = roc_curve(y_test, ns_probs)
+    mdl_fpr, mdl_tpr, _ = roc_curve(y_test, y_pred_proba)
+
+    # plot the roc curve for the model
+    plt.plot(ns_fpr, ns_tpr, linestyle='--', label='No Skill')
+    plt.plot(mdl_fpr, mdl_tpr, marker='.', label='Model')
+    # axis labels
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    # show the legend
+    plt.legend()
+    # show the plot
+    plt.show()
+
+    return
