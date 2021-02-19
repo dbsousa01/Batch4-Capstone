@@ -5,7 +5,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.metrics import classification_report, roc_auc_score
+from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix
 from sklearn.model_selection import GridSearchCV
 
 # Custom imports
@@ -119,8 +119,14 @@ grid_search.fit(X_train, y_train)
 y_pred = md.calculate_prediction(grid_search, X_test, decision_value=0.5)
 
 roc_score = roc_auc_score(y_test, y_pred)
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
 print(roc_score)
 print("Best parameters {}".format(grid_search.best_params_, grid_search.best_score_))
+print(
+    "{0}\nTrue Negatives: {1}\nFalse Positives: {2}\nFalse Negatives: {3}\nTrue Positives: {4}".format(
+        confusion_matrix(y_test, y_pred), tn, fp, fn, tp
+    )
+)
 print(
     classification_report(
         y_test, y_pred, target_names=["Not Successful Search", "Successful Search"]
@@ -148,6 +154,7 @@ if not is_satisfied:
     print("avg diff:", np.mean([p[1] for p in problematic_stations]))
 
 print(precision_per_station)
+
 ############################################
 # Save the model
 
