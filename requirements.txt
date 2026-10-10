@@ -84,5 +84,5 @@ typing-extensions==3.7.4.3
 urlparser==0.1.2
 wcwidth==0.2.5
 webencodings==0.5.1
-Werkzeug==1.0.1
+Werkzeug==3.1.9
 widgetsnbextension==3.5.1
